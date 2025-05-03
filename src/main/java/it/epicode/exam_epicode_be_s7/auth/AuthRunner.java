@@ -35,7 +35,7 @@ public class AuthRunner implements ApplicationRunner {
         // Creazione dell'utente organizer se non esiste
         Optional<AppUser> normalSeller = appUserService.findByUsername("organizer");
         if (normalUser.isEmpty()) {
-            appUserService.registerUser("organizer", "sellerpwd", Set.of(Role.ROLE_ORGANIZER));
+            appUserService.registerUser("organizer", "organizerpwd", Set.of(Role.ROLE_ORGANIZER));
         }
 
 
