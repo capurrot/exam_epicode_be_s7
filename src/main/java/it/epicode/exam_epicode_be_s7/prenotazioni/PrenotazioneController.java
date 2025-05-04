@@ -10,20 +10,20 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/prenotazioni")
 @RequiredArgsConstructor
-public class PrenotazioniController {
+public class PrenotazioneController {
 
     private final PrenotazioneService prenotazioneService;
 
     @PostMapping("/{eventoId}")
     @ResponseStatus(HttpStatus.CREATED)
     @PreAuthorize("hasRole('USER')")
-    public void prenota(@PathVariable Long eventoId) {
-        prenotazioneService.prenotaEvento(eventoId);
+    public PrenotazioneResponse prenota(@PathVariable Long eventoId) {
+        return prenotazioneService.prenotaEvento(eventoId);
     }
 
     @GetMapping("/mie")
     @PreAuthorize("hasRole('USER')")
-    public List<Prenotazione> leMiePrenotazioni() {
+    public List<PrenotazioneResponse> leMiePrenotazioni() {
         return prenotazioneService.leMiePrenotazioni();
     }
 
