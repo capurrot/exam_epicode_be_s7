@@ -1,5 +1,6 @@
 package it.epicode.exam_epicode_be_s7.eventi;
 
+import it.epicode.exam_epicode_be_s7.auth.AppUser;
 import it.epicode.exam_epicode_be_s7.prenotazioni.Prenotazione;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -35,6 +36,11 @@ public class Evento {
     @Column(nullable = false)
     private int numeroPostiDisponibili;
 
+    @ManyToOne
+    @JoinColumn(name = "organizzatore_id", nullable = false)
+    private AppUser organizzatore;
+
     @OneToMany(mappedBy = "evento", cascade = CascadeType.ALL)
     private List<Prenotazione> prenotazioni;
+
 }

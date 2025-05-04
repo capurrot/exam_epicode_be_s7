@@ -1,22 +1,31 @@
 package it.epicode.exam_epicode_be_s7.eventi;
 
-import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.time.LocalDate;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class EventoRequest {
-    @NotBlank(message = "Il titolo non può essere vuoto")
+
+    @NotBlank(message = "Il titolo non può essere vuoto")
     private String titolo;
-    @NotBlank(message = "La descrizione non può essere vuota")
+
+    @NotBlank(message = "La descrizione non può essere vuota")
     private String descrizione;
-    @NotBlank(message = "La data non può essere vuota")
-    private String data;
-    @NotBlank(message = "Il luogo non può essere vuoto")
+
+    @NotNull(message = "La data è obbligatoria")
+    @Future(message = "La data deve essere futura")
+    private LocalDate data;
+
+    @NotBlank(message = "Il luogo non può essere vuoto")
     private String luogo;
-    @NotBlank(message = "Il numero di posti disponibili non può essere vuoto")
+
+    @Min(value = 0, message = "Il numero di posti disponibili non può essere negativo")
     private int numeroPostiDisponibili;
 }
+
