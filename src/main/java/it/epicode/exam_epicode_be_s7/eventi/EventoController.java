@@ -3,6 +3,7 @@ package it.epicode.exam_epicode_be_s7.eventi;
 import it.epicode.exam_epicode_be_s7.commons.CommonResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -20,6 +21,7 @@ public class EventoController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
+    @PreAuthorize("hasRole('ORGANIZER')")
     public CommonResponse createEvento(EventoRequest eventoRequest) {
         return eventoService.saveEvento(eventoRequest);
     }
@@ -30,8 +32,15 @@ public class EventoController {
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ORGANIZER')")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteEvento(Long id) {
         eventoService.deleteEvento(id);
+    }
+
+    @PutMapping("/{id}")
+    @PreAuthorize("hasRole('ORGANIZER')")
+    public EventoResponse updateEvento(@PathVariable Long id, @RequestBody EventoRequest eventoRequest) {
+        return eventoService.updateEvento(id, eventoRequest);
     }
 }

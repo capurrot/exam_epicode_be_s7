@@ -1,11 +1,13 @@
 package it.epicode.exam_epicode_be_s7.eventi;
 
+import it.epicode.exam_epicode_be_s7.prenotazioni.Prenotazione;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Data
 @Entity
@@ -32,4 +34,7 @@ public class Evento {
 
     @Column(nullable = false)
     private int numeroPostiDisponibili;
+
+    @OneToMany(mappedBy = "evento", cascade = CascadeType.ALL)
+    private List<Prenotazione> prenotazioni;
 }

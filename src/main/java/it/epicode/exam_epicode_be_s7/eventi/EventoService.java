@@ -30,6 +30,15 @@ public class EventoService {
         eventoRepository.deleteById(id);
     }
 
+    public EventoResponse updateEvento(Long id, EventoRequest request) {
+        Evento evento = eventoRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Evento non trovato"));
+
+        BeanUtils.copyProperties(request, evento);
+        eventoRepository.save(evento);
+        return null;
+    }
+
     public EventoResponse fromEntityToResponse(Evento evento) {
         EventoResponse response = new EventoResponse();
         BeanUtils.copyProperties(evento, response);
