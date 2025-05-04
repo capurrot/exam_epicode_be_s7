@@ -15,6 +15,7 @@ public class EventoController {
     private final EventoService eventoService;
 
     @GetMapping
+    @PreAuthorize("isAuthenticated()")
     public List<EventoResponse> getAllEventi() {
         return eventoService.findAll();
     }
@@ -27,6 +28,7 @@ public class EventoController {
     }
 
     @GetMapping("/{id}")
+    @PreAuthorize("isAuthenticated()")
     public EventoResponse getEventoById(Long id) {
         return eventoService.findEventoById(id);
     }
