@@ -3,12 +3,13 @@ package it.epicode.exam_epicode_be_s7.prenotazioni;
 import it.epicode.exam_epicode_be_s7.auth.AppUser;
 import it.epicode.exam_epicode_be_s7.eventi.Evento;
 import it.epicode.exam_epicode_be_s7.eventi.EventoRepository;
+import it.epicode.exam_epicode_be_s7.exceptions.PostiEsauritiException;
+import it.epicode.exam_epicode_be_s7.exceptions.PrenotazioneDuplicataException;
+import it.epicode.exam_epicode_be_s7.exceptions.UnauthorizedActionException;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
@@ -26,12 +27,12 @@ public class PrenotazioneService {
                 .orElseThrow(() -> new EntityNotFoundException("Evento non trovato"));
 
         if (evento.getNumeroPostiDisponibili() <= 0) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Posti non disponibili per questo evento");
+            throw new PostiEsauritiException();
         }
 
         boolean alreadyBooked = prenotazioneRepository.existsByEventoAndUtente(evento, currentUser);
         if (alreadyBooked) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Hai già prenotato questo evento");
+            throw new PrenotazioneDuplicataException();
         }
 
         Prenotazione prenotazione = new Prenotazione();
@@ -79,7 +80,7 @@ public class PrenotazioneService {
                 .orElseThrow(() -> new EntityNotFoundException("Prenotazione non trovata"));
 
         if (!prenotazione.getUtente().getId().equals(currentUser.getId())) {
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Puoi annullare solo le tue prenotazioni");
+            throw new UnauthorizedActionException("Puoi annullare solo le tue prenotazioni");
         }
 
         Evento evento = prenotazione.getEvento();
@@ -89,5 +90,6 @@ public class PrenotazioneService {
         prenotazioneRepository.delete(prenotazione);
     }
 }
+
 
 

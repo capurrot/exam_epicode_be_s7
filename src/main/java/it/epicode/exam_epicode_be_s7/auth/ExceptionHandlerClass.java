@@ -1,6 +1,9 @@
 package it.epicode.exam_epicode_be_s7.auth;
 
 
+import it.epicode.exam_epicode_be_s7.exceptions.PostiEsauritiException;
+import it.epicode.exam_epicode_be_s7.exceptions.PrenotazioneDuplicataException;
+import it.epicode.exam_epicode_be_s7.exceptions.UnauthorizedActionException;
 import jakarta.persistence.EntityExistsException;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -97,4 +100,32 @@ public class ExceptionHandlerClass extends ResponseEntityExceptionHandler {
         exceptionMessage.setError(e.getMessage());
         return new ResponseEntity<>(exceptionMessage, HttpStatus.UNAUTHORIZED);
     }
+
+    @ExceptionHandler(PostiEsauritiException.class)
+    public ResponseEntity<ExceptionMessage> handlePostiEsauriti(PostiEsauritiException e) {
+        ExceptionMessage ex = new ExceptionMessage();
+        ex.setMessage(e.getMessage());
+        ex.setStatus("400");
+        ex.setError("Posti esauriti");
+        return new ResponseEntity<>(ex, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(PrenotazioneDuplicataException.class)
+    public ResponseEntity<ExceptionMessage> handleDuplicata(PrenotazioneDuplicataException e) {
+        ExceptionMessage ex = new ExceptionMessage();
+        ex.setMessage(e.getMessage());
+        ex.setStatus("400");
+        ex.setError("Prenotazione duplicata");
+        return new ResponseEntity<>(ex, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(UnauthorizedActionException.class)
+    public ResponseEntity<ExceptionMessage> handleUnauthorized(UnauthorizedActionException e) {
+        ExceptionMessage ex = new ExceptionMessage();
+        ex.setMessage(e.getMessage());
+        ex.setStatus("403");
+        ex.setError("Azione non autorizzata");
+        return new ResponseEntity<>(ex, HttpStatus.FORBIDDEN);
+    }
+
 }
